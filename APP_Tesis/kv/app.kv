@@ -1,0 +1,93 @@
+#: import Factory kivy.factory.Factory
+#:include kv\login_screen.kv
+#:include kv\user_profile_screen.kv
+#:include kv\register_screen.kv
+#:include kv\game_screen.kv
+#:import Animation kivy.animation.Animation
+#:include kv\config_screen.kv
+#:include kv\image_viewer.kv
+#:include kv\top_app_bar.kv
+#:include kv\main_screen.kv
+<DrawerClickableItem@MDNavigationDrawerItem>
+    focus_color: "#e7e4c0"
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    ripple_color: "#c5bdd2"
+    selected_color: "#0c6c4d"
+
+  
+<SignButton>
+    font_name: "LuckiestGuy"
+    font_size: "50sp"
+    background_color: (1,1,1,0)
+    canvas.before:
+        Color:
+            rgb: root.bg_color
+        RoundedRectangle: 
+            size: self.size
+            pos: self.x,self.y +5
+            radius: [10]
+        
+<DrawerLabelItem@MDNavigationDrawerItem>
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    focus_behavior: False
+    selected_color: "#4a4939"
+    _no_ripple_effect: True
+ 
+
+<ContentNavigationDrawer>
+
+    MDNavigationDrawerMenu:
+        
+        MDNavigationDrawerHeader:
+            title: "Robotitus!"
+            title_color: "#4a4939"
+            text: "'user'"
+            spacing: "4dp"
+            padding: "12dp", 0, 0, "56dp"
+
+        MDNavigationDrawerLabel:
+            text: "Navega!"
+
+        DrawerClickableItem:
+            icon: "robot"
+            right_text: "+99"
+            text_right_color: "#4a4939"
+            text: "Entrena!"
+            on_press:
+                app.set_screen('game_screen')
+                root.nav_drawer.set_state("close")
+
+        MDNavigationDrawerDivider:
+
+        MDNavigationDrawerLabel:
+            
+        DrawerLabelItem:
+        DrawerLabelItem:
+      
+
+        DrawerLabelItem:
+            pos_hint: "bottom"
+            text: "Configuri}acion"
+            icon: "cog"
+            on_press:
+                root.nav_drawer.set_state("close")
+                app.set_screen('config_screen')
+
+
+MDScreenManager:
+    id:screen_manager
+    LoginScreen:
+    MainScreen:
+    GameScreen:
+        id: game_screen
+    ConfigScreen:
+        id: config_screen
+    RegisterScreen:
+        id: register_screen
+    UserProfileScreen: 
+        id: user_screen
+    ImageViewerScreen:
+        id: image_viewer_screen
+

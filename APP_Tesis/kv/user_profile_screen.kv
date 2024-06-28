@@ -1,0 +1,108 @@
+<UserProfileScreen>:
+    name: "user_screen"
+    orientation: 'vertical'
+    MDTopAppBar:
+        id: topbar
+        title: "Perfil!"
+        pos_hint: {"top": 1}
+        size_hint_y: .10             
+        title_center: True
+        right_action_items: [["robot-happy"]]
+        left_action_items: [["arrow-left-bold", lambda x : app.back_with_animation('main_screen')]]
+  
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.11
+
+    MDBoxLayout:
+        size_hint_y: 0.81  # Ajusta el tamaño de la tarjeta
+        orientation: 'vertical'
+        padding: dp(20)
+
+        BoxLayout:
+            id: profile_picture
+            size_hint: None, None
+            size: dp(150), dp(150)
+            pos_hint: {"center_x": 0.5, "center_y": 0.85}
+            padding: dp(5)
+            canvas.before:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    pos: self.center_x - dp(75), self.center_y - dp(75)
+                    size: dp(150), dp(150)
+                    angle_start: 0
+                    angle_end: 360
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.81  # Ajusta el tamaño de la tarjeta
+            pos_hint: {"center_y": 0.81}  # Ajusta la posición vertical
+            
+            MDLabel:
+                id: profile_user_name
+                text: ""
+                font_size: "20sp"
+                halign: 'center'
+                pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDLabel:
+                id: profile_institution
+                text: "Universidad Del Bio-bio"
+                halign: 'center'
+                font_size: "12sp"
+                color: rgba(188, 202, 228, 255)
+
+            MDLabel:
+                id: profile_user_email
+                text: ""
+                halign: 'center'
+                font_size: "12sp"
+                color: rgba(188, 202, 228, 255)
+
+        MDBoxLayout: 
+            MDGridLayout:
+                rows: 2
+                cols: 3
+                halign: 'center'
+                size_hint: .85, .12
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                padding: dp(10), dp(10)  # Añade padding
+                spacing: dp(20), dp(20)  # Añade espacio entre las filas y columnas
+
+                MDLabel:
+                    text: "Puntaje Más Alto"
+                    halign: "center"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+                MDLabel:
+                    text: "Tasa de Crecimiento"
+                    halign: "center"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+                MDLabel:
+                    text: "Racha Más Larga"
+                    halign: "center"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+
+                MDLabel:
+                    id: highest_score
+                    text: "1"
+                    halign: "center"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+
+                MDLabel:
+                    id: growth_rate
+                    text: "1"
+                    halign: "center"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+
+                MDLabel:
+                    id: longest_streak
+                    text: "1"
+                    halign: "center"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)

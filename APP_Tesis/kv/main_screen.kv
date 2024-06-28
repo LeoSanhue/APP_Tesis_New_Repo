@@ -1,0 +1,64 @@
+<MainScreen>:
+    id: main_screen
+    name: "main_screen"
+
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        pos_hint: {"center_x":.5,"center_y":.4}
+        height: Window.height - dp(100)  # Ajustar dinámicamente según el tamaño de la ventana
+        padding_top: "56dp"  # Agrega un espacio de 56dp en la parte superior
+        MDBoxLayout:
+            id: news_container
+            orientation: "vertical"
+            size_hint_y: None
+            padding: dp(10)
+            spacing: dp(15)
+            height: self.minimum_height
+            radius: (15,)  # Bordes redondeados
+            elevation: 2  # Sombra 
+    MDTopAppBar:
+        id: topbar
+        title: "Bienvenido!"
+        pos_hint: {"top": 1}
+        title_center: True
+        size_hint_y: .10
+        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+        right_action_items: [["account-arrow-left", lambda x : app.set_screen('user_screen')]]
+   
+    MDNavigationLayout:
+        MDScreenManager:
+            id: scr_manager       
+        MDNavigationDrawer:
+            id: nav_drawer
+            radius: (0, 16, 16, 0)
+            ContentNavigationDrawer:
+                screen_manager: scr_manager
+                nav_drawer: nav_drawer
+
+<NewsItem>:
+    news_id: root.image_source
+    size_hint_y: None
+    height: dp(150)
+    padding: dp(10)
+    spacing: dp(10)
+    MDCard:
+        halign: "center"
+        orientation: "horizontal"
+        padding: dp(10)
+        size_hint: None, None
+        size: root.size
+        radius: dp(15)
+        elevation: 10
+
+        Image:
+            source: root.image_source
+            size_hint_x: 0.4
+            allow_stretch: True
+
+        MDLabel:
+            text: root.text
+            size_hint_x: 0.6
+            theme_text_color: "Primary"
+            valign: "middle"
+            halign: "left"

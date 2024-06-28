@@ -1,0 +1,88 @@
+#:include Screens/componentes/listitem/list_item.kv
+<ConfigScreen>:
+    name: "config_screen"
+    
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            id: topbar
+            title: "Perfil!"
+            pos_hint: {"top": 1}              
+            title_position: {'center_x': 0.4}
+            right_action_items: [["robot-happy"]]
+            left_action_items: [["arrow-left-bold", lambda x : app.back_with_animation('main_screen')]]
+            size_hint_y: .22
+        MDBoxLayout:
+            orientation: 'vertical'
+            adaptive_height: True
+            padding: "24dp"
+
+            Header:
+                text: "Estilo"
+                
+            TwoLineListItemWithSwitch:
+                id: tema
+                active: True
+                text: "Tema(Dia/Noche)"
+                secondary_text: 'Cambia el estilo de la app'
+                # Agregar evento on_active
+                RightSwitchContainer:
+                    id: switch_tema
+                    active: tema.active  # Sincronizar estado activo con el ListItem
+                    on_active: app.set_theme("Dark", "Blue", "Blue") if self.active else app.set_theme("Light", "Blue", "Blue")
+            MDSeparator:
+            MDLabel:
+                
+            Header:
+                text: "Perfil"
+                padding_y: "16dp"
+            TwoLineListItemWithButton:
+                id: fotodeperfil
+                text: "Foto de Perfil"
+                secondary_text: 'Cambia tu foto de perfil'
+                # Agregar evento on_active
+                RightButtonContainer:
+                    icon: "robot"
+                    radius: (15,)  # Bordes redondeados
+                    elevation: 10  # Sombra 
+                    on_release: app.set_screen("image_viewer_screen")
+
+            TwoLineListItemWithButton:
+                id: tema
+                text: "Nombre de usuario"
+                secondary_text: 'Cambia tu nomnre de usuario'
+                # Agregar evento on_active
+                RightButtonContainer:
+                    icon: "robot"
+                    radius: (15,)  # Bordes redondeados
+                    elevation: 10  # Sombra 
+                    on_release: root.show_confirmation_dialog()
+                    
+        MDWidget:
+    MDIcon:
+        icon: "cog"
+        font_size: "280"
+        #theme_text_color: ""
+        text_color: "#60675B"
+        pos_hint: {"center_x": .5,"center_y": .5}
+        opacity: .4
+
+
+<ItemConfirm>
+    on_release: root.set_icon(check)
+
+    CheckboxLeftWidget:
+        id: check
+        group: "check"
+
+<Content>
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "120dp"
+
+    MDTextField:
+        id: text_input
+        hint_text: "City"
+
+ 

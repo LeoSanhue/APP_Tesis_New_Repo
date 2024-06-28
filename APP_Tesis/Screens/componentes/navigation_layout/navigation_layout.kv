@@ -1,0 +1,23 @@
+<ContentNavigationDrawer>
+    screen_manager: screen_manager
+    nav_drawer: nav_drawer
+    
+<MainScreenNavigationLayout@MDNavigationLayout>:
+    MDScreenManager:
+        id: screen_manager
+        GameScreen:
+            name: "game_screen"
+
+        MDScreen:
+            name: "scr 1"
+            # Contenido de la pantalla "scr 1"
+
+        ConfigScreen:
+            name: "config_screen"
+            # Contenido de la pantalla de configuración
+
+    MDNavigationDrawer:
+        id: nav_drawer
+        radius: (0, 16, 16, 0)
+        ContentNavigationDrawer:
+          

@@ -1,0 +1,82 @@
+
+<RegisterScreen>:
+    name: "register_screen"
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "15dp"  # Espaciado entre los widgets
+        MDLabel:
+        MDTextField:
+            id: email_field
+            hint_text: "email"
+            mode: "round"
+            icon_left: 'email'
+            helper_text_mode: "persistent"
+            size_hint_y: None
+            multiline: False
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+
+        MDTextField:
+            id: username_field
+            hint_text: "Username"
+            icon_left: 'account'
+            mode: "round"
+            helper_text_mode: "persistent"
+            size_hint_y: None
+            multiline: False
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+            max_text_length: 12
+
+        MDTextField:
+            id: username_field
+            hint_text: "Username"
+            icon_left: 'account'
+            mode: "round"
+            helper_text_mode: "persistent"
+            size_hint_y: None
+            multiline: False
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+            max_text_length: 12
+
+        MDTextField:
+            id: password_field
+            max_text_length: 12
+            hint_text: "Password"
+            mode: "round"
+            helper_text_mode: "persistent"
+            multiline: False
+            password: True
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+         # Agrega una etiqueta MDIcon para mostrar el ícono de ticket
+            icon_left: 'key-variant'
+            on_text: root.check_password_match()
+        
+        MDTextField:
+            id: repassword_field
+            max_text_length: 12
+            mode: "round"
+            hint_text: "Confirma la contraseña "
+            helper_text_mode: "persistent"
+            multiline: False
+            password: True
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+            icon_left: 'key-variant'
+            on_text: root.check_password_match()
+
+        MDRectangleFlatButton:
+            text: "Register"
+            size_hint: .2, .1
+            pos_hint: {"center_x": 0.5}
+            on_press: root.register()  # Llamar al método register cuando se presione el botón
+            size_hint_y: None  # Hacer que el botón tenga un tamaño fijo
+            height: "48dp"  # Altura fija del botón
+            pos_hint: {"center_x": 0.5}  # Centrar el botón horizontalmente
+        MDLabel:
+            

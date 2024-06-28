@@ -1,0 +1,38 @@
+#: include ..\componentes\header\
+<ConfigScreen>:
+    name: "config_screen"
+    MDBoxLayout:
+        pos_hint: {"center_y": .8}
+        size_hint: 1, .2
+        size: 300, button.height
+        padding: 10
+        MDLabel:
+            pos_hint: {"center_y": .5}
+            text: 'Set Theme'
+            halign: 'center'
+        MDRaisedButton:
+            padding: 10
+            pos_hint: {"center_y": .5}
+            text: 'Dark'
+            on_release: app.set_theme("Dark", "Orange", "Orange")
+        MDRaisedButton:
+            id: button
+            pos_hint: {"center_y": .5}
+            text: 'Light'
+            on_release: app.set_theme("Light", "Blue", "Blue")
+    MDSeparator:
+        size_hint_x: 1
+        pos_hint: {'center_y': .7}
+    MDBoxLayout:
+        pos_hint: {"center_y": .6}
+        size_hint: 1, .2
+    MDBoxLayout:
+        pos_hint: {"center_y": .4}
+        size_hint: 1, .2
+
+    MDBoxLayout:
+        pos_hint: {"center_y": .2}
+        size_hint: 1, .2
+
+    MDBoxLayout:
+        size_hint: 1, .2

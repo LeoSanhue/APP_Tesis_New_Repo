@@ -1,0 +1,19 @@
+<BackgroundViewerScreen>:
+    name: "background_viewer_screen"
+    BoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            id: topbar
+            title: "Selecciona un fondo!"
+            pos_hint: {"top": 1}              
+            title_center: True
+            left_action_items: [["arrow-left-bold", lambda x : app.back_with_animation('config_screen')]]
+            size_hint_y: .10
+        ScrollView:
+            MDBoxLayout:
+                id: background_list
+                orientation: "vertical"
+                size_hint_y: None
+                padding: dp(10)
+                spacing: dp(10)
+                height: self.minimum_height

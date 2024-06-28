@@ -1,0 +1,399 @@
+#: import Factory kivy.factory.Factory
+
+<DrawerClickableItem@MDNavigationDrawerItem>
+    focus_color: "#e7e4c0"
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    ripple_color: "#c5bdd2"
+    selected_color: "#0c6c4d"
+
+
+<DrawerLabelItem@MDNavigationDrawerItem>
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    focus_behavior: False
+    selected_color: "#4a4939"
+    _no_ripple_effect: True
+
+       
+
+<ContentNavigationDrawer>
+
+    MDNavigationDrawerMenu:
+        
+        MDNavigationDrawerHeader:
+            title: "Header title"
+            title_color: "#4a4939"
+            text: "Header text"
+            spacing: "4dp"
+            padding: "12dp", 0, 0, "56dp"
+
+        MDNavigationDrawerLabel:
+            text: "mail"
+
+        DrawerClickableItem:
+            icon: "gmail"
+            right_text: "+99"
+            text_right_color: "#4a4939"
+            text: "Inbox"
+
+        DrawerClickableItem:
+            icon: "send"
+            text: "Outbox"
+            
+        MDNavigationDrawerDivider:
+
+        MDNavigationDrawerLabel:
+            
+        DrawerLabelItem:
+            text: "Juego"
+            icon: "information-outline"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "game_screen"
+
+        DrawerLabelItem:
+            text: "Screen 2"
+            icon: "information-outline"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "scr 2"
+
+
+        DrawerLabelItem:
+            text: "Screen 3"
+            icon: "information-outline"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "config_screen"
+ScreenManager:
+    LoginScreen:
+    GameScreen:
+    ConfigScreen:
+    MainScreen:
+    RegisterScreen:
+    UserProfileScreen: 
+            
+<LoginScreen>:
+    name: "login_screen"
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "10dp"  # Espaciado entre los widgets
+        MDLabel:
+        MDTextField:
+            id: username_field
+            hint_text: "Username"
+            mode: "round"
+            color_active: 1, 1, 1, 1  # Color del texto activo (blanco)
+            color_normal: 1, 1, 1, 1  # Color del texto normal (blanco)
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5, "y": 0.1}
+
+        MDTextField:
+            id: password_field
+            hint_text: "Password"
+            mode: "round"
+            password: True
+            color_active: 1, 1, 1, 1  # Color del texto activo (blanco)
+            color_normal: 1, 1, 1, 1  # Color del texto normal (blanco)
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5, "y": 0.2}
+
+        MDRectangleFlatButton:
+            text: "Login"
+            size_hint: .2, .1
+            pos_hint: {"center_x": 0.5, "y": 0.3}
+            on_press: root.login()  # Llamar al método login cuando se presione el botón
+            size_hint_y: None  # Hacer que el botón tenga un tamaño fijo
+            height: "48dp"  # Altura fija del botón
+            pos_hint: {"center_x": 0.5}  # Centrar el botón horizontalmente
+        MDLabel:
+            
+        MDRectangleFlatButton:
+            text: "Register"
+            size_hint: .2, .1
+            pos_hint: {"center_x": 0.5, "y": 0.3}
+            on_press: root.register()  # Llamar al método login cuando se presione el botón
+            size_hint_y: None  # Hacer que el botón tenga un tamaño fijo
+            height: "48dp"  # Altura fija del botón
+            pos_hint: {"center_x": 0.5}  # Centrar el botón horizontalmente
+    
+
+
+<GameScreen>:
+   
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 15
+        MDLabel:
+        
+        MDLabel:
+            id: button_start_game
+            halign: "center"
+            text: ""  # El texto del ejercicio se actualizará dinámicamente
+            size_hint: 0.4, 0.1
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        MDTextField:
+            id: user_input
+            multiline: False
+            hint_text: "Ingrese su respuesta"
+            helper_text_mode: "persistent"
+            mode:"round"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5, "center_y": 1}
+        MDRectangleFlatButton:
+            text: "Comprobar respuesta"
+            size_hint: 0.5, 0.1
+            pos_hint: {"center_x": 0.5, "center_y": 1}
+            on_press: root.check_answer()  # Llama al método check_answer cuando se presiona el botón
+        MDLabel:
+       
+<ConfigScreen>:
+    MDBoxLayout:
+        pos_hint: {"center_y": .8}
+        size_hint: 1, .2
+        size: 300, button.height
+        padding: 10
+        MDLabel:
+            pos_hint: {"center_y": .5}
+            text: 'Set Theme'
+            halign: 'center'
+        MDRaisedButton:
+            padding: 10
+            pos_hint: {"center_y": .5}
+            text: 'Dark'
+            on_release: app.set_theme("Dark", "Orange", "Orange")
+        MDRaisedButton:
+            id: button
+            pos_hint: {"center_y": .5}
+            text: 'Light'
+            on_release: app.set_theme("Light", "Blue", "Blue")
+    MDSeparator:
+        size_hint_x: 1
+        pos_hint: {'center_y': .7}
+    MDBoxLayout:
+        pos_hint: {"center_y": .6}
+        size_hint: 1, .2
+    MDBoxLayout:
+        pos_hint: {"center_y": .4}
+        size_hint: 1, .2
+
+    MDBoxLayout:
+        pos_hint: {"center_y": .2}
+        size_hint: 1, .2
+
+    MDBoxLayout:
+        size_hint: 1, .2
+
+
+<MainScreen>:
+    name: "main_screen"
+    MDTopAppBar:
+        type_height: "small"
+        pos_hint: {"top": 1}
+        elevation: 4
+        title: "Hola!"
+        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+        right_action_items: [["face-man-profile", lambda x: root.UserProfile()]]
+
+    MDNavigationLayout:
+
+        MDScreenManager:
+            id: screen_manager
+            GameScreen:
+                name: "game_screen"
+
+            MDScreen:
+                name: "scr 1"
+            
+                orientation: "vertical"
+                size_hint: None, None
+                size: "150dp", "150dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                MDRectangleFlatButton:
+                    text: 'SCREEN1'
+                    halign: 'center'
+                    on_press:
+                        root.on_button_press_1()
+
+            ConfigScreen:
+                name: "config_screen"
+              
+            
+           
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            radius: (0, 16, 16, 0)
+
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
+
+
+<RegisterScreen>:
+    name: "register_screen"
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "15dp"  # Espaciado entre los widgets
+        MDLabel:
+        MDTextField:
+            id: email_field
+            hint_text: "email"
+            mode: "round"
+            icon_left: 'email'
+            helper_text_mode: "persistent"
+            size_hint_y: None
+            multiline: False
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+
+        MDTextField:
+            id: username_field
+            hint_text: "Username"
+            icon_left: 'account'
+            mode: "round"
+            helper_text_mode: "persistent"
+            size_hint_y: None
+            multiline: False
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+            max_text_length: 12
+
+        MDTextField:
+            id: username_field
+            hint_text: "Username"
+            icon_left: 'account'
+            mode: "round"
+            helper_text_mode: "persistent"
+            size_hint_y: None
+            multiline: False
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+            max_text_length: 12
+
+        MDTextField:
+            id: password_field
+            max_text_length: 12
+            hint_text: "Password"
+            mode: "round"
+            helper_text_mode: "persistent"
+            multiline: False
+            password: True
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+         # Agrega una etiqueta MDIcon para mostrar el ícono de ticket
+            icon_left: 'key-variant'
+            on_text: root.check_password_match()
+        
+        MDTextField:
+            id: repassword_field
+            max_text_length: 12
+            mode: "round"
+            hint_text: "Confirma la contraseña "
+            helper_text_mode: "persistent"
+            multiline: False
+            password: True
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5}
+            icon_left: 'key-variant'
+            on_text: root.check_password_match()
+
+        MDRectangleFlatButton:
+            text: "Register"
+            size_hint: .2, .1
+            pos_hint: {"center_x": 0.5}
+            on_press: root.register()  # Llamar al método register cuando se presione el botón
+            size_hint_y: None  # Hacer que el botón tenga un tamaño fijo
+            height: "48dp"  # Altura fija del botón
+            pos_hint: {"center_x": 0.5}  # Centrar el botón horizontalmente
+        MDLabel:
+            
+                
+<UserProfileScreen>:
+    name: "user_screen"
+    orientation: 'vertical'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.11
+        pos_hint: {"top": 1}
+        MDTopAppBar:
+            type_height: "small"
+            pos_hint: {"top": 1}
+            title: "Hola!"
+            left_action_items: [["arrow-left-bold-circle", lambda x: root.go_back_to_main_screen()]]
+            elevation: 4
+                
+    MDBoxLayout:
+        size_hint_y: 0.81  # Ajusta el tamaño de la tarjeta
+        #  md_bg_color: (246, 250, 255, 255)
+        orientation: 'vertical'
+
+        Image:
+            source: "Foto_solidaridad.webp"
+            size_hint_x: 0.7
+            size_hint_y: 0.7
+            halign: 'center'
+            pos_hint: {"center_x": 0.5, "center_y": 0.85}
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.81  # Ajusta el tamaño de la tarjeta
+            pos_hint: {"center_y": 0.81}  # Ajusta la posición vertical
+            
+                
+            MDLabel:
+                id: profile_user_name
+                text: ""
+                #   font_name: "BPoppins"
+                font_size: "20sp"
+                halign: 'center'
+                pos_hint: {"center_x": .5, "center_y": .5}
+                # color: rgba(71, 92, 119, 255)
+            MDLabel:
+                text: "Universidad Del Bio-bio"
+                # font_name: "MPoppins"
+                halign: 'center'
+                font_size: "12sp"
+                color: rgba(188, 202, 228, 255)
+            MDLabel:
+                id: profile_user_email
+                text: ""
+            #  font_name: "MPoppins"
+                halign: 'center'
+                font_size: "12sp"
+                color: rgba(188, 202, 228, 255)
+        MDBoxLayout: 
+            MDGridLayout:
+                rows: 2
+                cols: 3
+                halign: 'center'
+                size_hint: .85, .12
+                pos_hint: {"center_x": 5, "center_y": 1}
+                MDLabel:
+                    text: "Puntaje Mas alto"
+                    halign: "center"
+                    # font_name: "MPoppins"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+                MDLabel:
+                    text: "Taza de Crecimiento"
+                    halign: "center"
+                    #  font_name: "MPoppins"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+                MDLabel:
+                    text: "Racha mas larga"
+                    halign: "center"
+                    #  font_name: "MPoppins"
+                    font_size: "12sp"
+                    color: rgba(188, 202, 228, 255)
+                        
+                    

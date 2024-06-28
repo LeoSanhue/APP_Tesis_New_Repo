@@ -1,0 +1,202 @@
+<MDBottomNavigationItem>:
+    state: 'normal'  # Asegura que ninguna pestaña esté inicialmente seleccionada
+<UserProfileScreen>:
+    name: "user_screen"
+    orientation: 'vertical'
+    FloatLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "15dp"  # Espaciado entre los widgets
+        canvas.before:
+            Color:
+                rgba: rgba('#0034C3')
+            Triangle:
+                points: [0, 0, self.size[0], 0, 0, .4*self.size[1]]
+            Color:
+                rgba: rgba('#0e1574c8')
+            Triangle:
+                points: [0, 0, self.size[0], 0, self.size[0], .4*self.size[1]]
+            Color:
+                rgba: rgba('#0034C380')  # Color más degradado del primer triángulo
+            Triangle:
+                points: [0, .2*self.size[1], self.size[0], .2*self.size[1], 0, .4*self.size[1]]
+            Color:
+                rgba: rgba('#0e157480')  # Color más degradado del segundo triángulo
+            Triangle:
+                points: [0, .2*self.size[1], self.size[0], .2*self.size[1], self.size[0], .4*self.size[1]]
+        
+        MDTopAppBar:
+            id: topbar
+            title: "Perfil!"
+            pos_hint: {"top": 1}
+            size_hint_y: .1            
+            title_center: True
+            right_action_items: [["robot-happy"]]
+            left_action_items: [["arrow-left-bold", lambda x : app.back_with_animation('main_screen')]]
+        
+        # FloatLayout para el contenido principal y el botón flotante
+        FloatLayout:
+            size_hint_y: 0.9  # Ajusta el tamaño del contenido principal
+            pos_hint: {"top": 0.9}
+                
+            
+            # Contenido principal
+            MDBoxLayout:
+                size_hint_y: 0.85  # Ajusta el tamaño de la tarjeta
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                spacing: 5
+                padding: 5            
+                orientation: 'vertical'
+                MDCard:
+                    pos_hint: {"center_x": 0.5, "center_y": 0.}
+                    size_hint: (0.5,0.5) # Ajusta el tamaño de la tarjeta
+                    elevation: 2
+                    md_bg_color: ("#234090")
+                    canvas.before:
+                        Ellipse:
+                            pos: self.center_x - dp(75), self.center_y - dp(75)
+                            size: dp(150), dp(150)
+                            angle_start: 0
+                            angle_end: 360
+                    MDBoxLayout:
+                        id: profile_picture
+                        size_hint_y: 0.1  # Ajusta el tamaño de la tarjeta
+                        size: dp(150), dp(120)
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        padding: dp(5)
+                        canvas.before:
+                            Color:
+                                rgb: 1, 1, 1
+                            Ellipse:
+                                pos: self.center_x - dp(75), self.center_y - dp(75)
+                                size: dp(150), dp(150)
+                                angle_start: 0
+                                angle_end: 360
+                MDBoxLayout:
+                    size_hint_y: 0.3  # Ajusta el tamaño de la tarjeta
+                    pos_hint: {"center_x":0.5,"center_y": 0.7}  # Ajusta la posición vertical
+                    # padding: dp(5)
+                    orientation: 'vertical'
+                    MDLabel:
+                        id: profile_user_name
+                        text: ""
+                        font_size: "20sp"
+                        size_hint_y: 0.2
+                        halign: 'center'
+                    MDLabel:    
+                        id: profile_institution
+                        text: "Universidad Del Bio-bio"
+                        font_size: "15sp"
+                        color: rgba(188, 202, 228, 255)
+                        size_hint_y: 0.2
+                        halign: 'center'
+                    #MDLabel:
+                    #    id: profile_user_email
+                    #    text: ""
+                    #    halign: 'center'
+                    #    font_size: "12sp"
+                    #    color: rgba(188, 202, 228, 255)
+                    #    pos_hint: {"center_x": .5, "center_y": .1}
+                MDBoxLayout:
+                    size_hint_y: .3
+                    pos_hint: {"center_x": 0.5}
+                    MDGridLayout:
+                        rows: 1
+                        cols: 3
+                        padding: dp(10), dp(10)  # Añade padding
+                        spacing: dp(20), dp(20)  # Añade espacio entre las filas y columnas
+
+                        MDCard:
+                            orientation: 'vertical'
+                            size: dp(50), dp(50)
+                            elevation: 2
+                            padding: dp(10)
+                            #pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            MDLabel:
+                                text: "Puntaje Más Alto"
+                                halign: "center"
+                                font_size: "12sp"
+                                color: rgba(188, 202, 228, 255)
+                            MDLabel:
+                                id: highest_score
+                                text: "1"
+                                halign: "center"
+                                font_size: "20sp"
+                                color: rgba(188, 202, 228, 255)
+
+                        MDCard:
+                            orientation: 'vertical'
+                            size: dp(50), dp(50)
+                            elevation: 2
+                            padding: dp(10)
+                            #pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            MDLabel:
+                                text: "Tasa de Crecimiento"
+                                halign: "center"
+                                font_size: "12sp"
+                                color: rgba(188, 202, 228, 255)
+                            MDLabel:
+                                id: growth_rate
+                                text: ""
+                                halign: "center"
+                                font_size: "20sp"
+                                color: rgba(188, 202, 228, 255)
+
+                        MDCard:
+                            orientation: 'vertical'
+                            size: dp(50), dp(50)
+                            elevation: 2
+                            padding: dp(10)
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            MDLabel:
+                                text: "Racha Más Larga"
+                                halign: "center"
+                                font_size: "12sp"
+                                color: rgba(188, 202, 228, 255)
+                            MDLabel:
+                                id: longest_streak
+                                text: "1"
+                                halign: "center"
+                                font_size: "20sp"
+                                color: rgba(188, 202, 228, 255)
+                MDBoxLayout:
+                    size_hint_y: .1
+
+        MDFloatingActionButton:
+            icon: "calendar"
+            pos_hint: {"right": 0.98, "top": 0.89}
+            elevation: 2
+            on_release: root.show_confirmation_dialog()
+        # Botón flotante en la esquina superior derecha
+        MDBottomNavigation:
+            id: bot_nav
+            size_hint_y: 0.1
+            pos_hint: {"bottom": 1}
+            MDBottomNavigationItem:
+                text: 'News'
+                icon: 'newspaper'
+                on_tab_release: app.back_with_animation('main_screen')
+                state: 'normal'  # Asegura que ninguna pestaña esté inicialmente seleccionada
+
+            MDBottomNavigationItem:
+                text: 'User'
+                icon: 'account'
+                on_tab_release: app.set_screen('user_screen')
+                state: 'normal'  # Asegura que ninguna pestaña esté inicialmente seleccionada
+
+            MDBottomNavigationItem:
+                text: 'Games'
+                icon: 'gamepad'
+                on_tab_release: app.set_screen('game_screen')
+                state: 'normal'  # Asegura que ninguna pestaña esté inicialmente seleccionada
+
+            MDBottomNavigationItem:
+                text: 'Settings'
+                icon: 'cog'
+                on_tab_release: app.set_screen('config_screen')
+                state: 'normal'  # Asegura que ninguna pestaña esté inicialmente seleccionada
+<Content>
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "120dp"

@@ -1,0 +1,219 @@
+
+<SignButton>
+    font_name: "LuckiestGuy"
+    font_size: "50sp"
+    background_color: (1,1,1,0)
+    canvas.before:
+        Color:
+            rgb: root.bg_color
+        RoundedRectangle: 
+            size: self.size
+            pos: self.x,self.y +5
+            radius: [10]
+        
+                
+<StartButton>
+    font_name: "LuckiestGuy"
+    font_size: "20sp"
+    background_color: (1,1,1,0)
+    disabled_color: (1,1,1,1)
+    background_down: self.background_normal
+    canvas.before:
+        Color:
+            rgb: root.bg_color
+        RoundedRectangle: 
+            size: self.size
+            pos: self.x,self.y +5
+            radius: [10]
+        BoxShadow:
+            pos: self.pos
+            size: self.size
+            offset: 0, 0
+            spread_radius: -10, -10
+            border_radius: 5, 5, 5, 5
+            blur_radius: 40 if self.state == "normal" else 25                
+
+<SuperLabel>
+    font_name: "LuckiestGuy"
+    font_size: "20sp"
+    background_color: (1,1,1,0)
+    
+    canvas.before:
+        Color:
+            rgb: root.bg_color
+        RoundedRectangle: 
+            size: self.size
+            pos: self.x,self.y +5
+            radius: [10]
+        
+                           
+<GameScreen>:
+    id: game_screen
+    name: "game_screen"
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            id: topbar
+            title: "Piensa Rapido!"
+            pos_hint: {"top": 1}              
+            title_position: {'center_x': 0.4}
+            right_action_items: [["robot-happy"]]
+            left_action_items: [["arrow-left-bold", lambda x : app.back_with_animation('main_screen')]]
+            size_hint_y: .1
+        BoxLayout:
+            size_hint_y: .85
+            orientation: 'vertical'
+            pos_hint: {'center_x': 0.5,'center_y': 0.9}
+            spacing: 15
+            MDLabel:  
+                size_hint: 1, 0.1
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 0.1
+                spacing: 5
+                StartButton:
+                    id: timer_label
+                    halign: "center"
+                    text: "Tiempo restante: 30s"
+                    size_hint_x: 0.5
+                    opacity: 0
+                    bg_color: 0/255, 68/255, 146/255, 1
+
+                StartButton:
+                    id: score_label
+                    halign: "center"
+                    text: "Puntaje: 0"
+                    size_hint_x: 0.5
+                    opacity: 0                    
+                    bg_color: 0/255, 68/255, 146/255, 1
+
+    
+            StartButton:
+                id: button_start_game
+                halign: "center"
+                text: "Comenzar"  # El texto del ejercicio se actualizará dinámicamente
+                size_hint: 1, 0.3
+                pos_hint: {"center_x": 0.5}
+                opacity: 0  # Inicialmente oculto
+                on_press: root.start_game()  
+                bg_color: 0/255, 101/255, 190/255, 1
+
+            BoxLayout:
+                size_hint: 1, 0.3
+                orientation: 'vertical'
+                spacing: 5
+                pos_hint: {"center_x": 0.5,"center_y": 0.1}
+
+                
+                
+                MDGridLayout:
+                    rows: 3
+                    cols: 1
+                    size_hint: (.6,.3)
+                    pos_hint: {"center_x": .5, "center_y": .47}
+                    spacing: 15  
+                    StartButton:
+                        id: button1
+                        text: ""  # Respuesta rápida 1
+                        pos_hint: {"center_x": 0.5}
+                        size_hint_x: 0.5
+                        on_press: root.check_quick_answer(self.text)
+                        opacity: 0  # Inicialmente oculto
+                        bg_color: 0/255, 68/255, 146/255, 1
+
+                    StartButton:
+                        id: button2
+                        text: ""  # Respuesta rápida 2
+                        pos_hint: {"center_x": 0.5}
+                        size_hint_x: 0.5
+                        on_press: root.check_quick_answer(self.text)
+                        opacity: 0  # Inicialmente oculto
+                        bg_color: 0/255, 101/255, 190/255, 1
+
+                    StartButton:
+                        id: button3
+                        text: ""  # Respuesta correcta
+                        pos_hint: {"center_x": 0.5}
+                        size_hint_x: 0.5
+                        on_press: root.check_quick_answer(self.text)
+                        opacity: 0  # Inicialmente oculto
+                        bg_color: 0/255, 68/255, 146/255, 1
+            MDLabel:  
+                size_hint: 1, 0.1
+
+       
+    MDIcon:
+        icon: "robot"
+        font_size: "280"
+        text_color: "#60675B"
+        pos_hint: {"center_x": .5,"center_y": .5}
+        opacity: .2
+        elevation: -2
+
+<DifficultySelectionModal>:
+    orientation: 'vertical'
+    padding: 15
+    SignButton:
+        id:a
+        text: "Fácil"
+        pos_hint: {"center_x": 0.5}
+        size_hint_x: 0.8
+        size_hint_y: 0.2
+        on_press: root.set_difficulty("easy")
+        bg_color: 0/255, 68/255, 146/255, 1
+        
+    SignButton:
+        id:cancel
+        text: "Medio"
+        pos_hint: {"center_x": 0.5}
+        size_hint_x: 0.8
+        size_hint_y: 0.2
+        on_press: root.set_difficulty("medium")
+        bg_color: 0/255, 68/255, 146/255, 1
+
+    SignButton:
+        id:cancel
+        text: "Difícil"
+        pos_hint: {"center_x": 0.5}
+        size_hint_x: 0.8
+        size_hint_y: 0.2
+        on_press: root.set_difficulty("hard")
+        bg_color: 0/255, 68/255, 146/255, 1
+
+<ScoreScreen>:
+    name: 'score_screen'
+    MDTopAppBar:
+        id: topbar
+        title: "Piensa Rapido!"
+        pos_hint: {"top": 1}              
+        title_position: {'center_x': 0.4}
+        right_action_items: [["robot-happy"]]
+        left_action_items: [["robot-angry"]]
+        size_hint_y: .10
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(48)
+
+        MDLabel:
+            id: puntaje
+            text: 'Nuevo Puntaje Mas Alto:' if root.new_record_score else 'Puntaje Final:'
+            font_size: '24sp'
+
+        MDLabel:
+            text: str(root.points)  # Muestra el puntaje obtenido
+            font_size: '36sp'
+
+        MDLabel:
+            id: racha
+            text: 'Nueva Racha más larga:' if root.new_record_streak else 'Racha más larga:'
+            font_size: '24sp'
+
+        MDLabel:
+            text: str(root.streak)  # Muestra la racha obtenida
+            font_size: '36sp'
+
+        Button:
+            text: 'Volver al Inicio'
+            size_hint_y: None
+            height: dp(48)
+            on_press: app.back_with_animation('main_screen')  # Vuelve a la pantalla principal

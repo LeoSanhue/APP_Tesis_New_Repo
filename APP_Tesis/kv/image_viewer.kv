@@ -1,0 +1,22 @@
+<ImageViewerScreen>:
+    name: "image_viewer_screen"
+    
+    BoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            id: topbar
+            title: "Selecciona tu imagen de perfil!"
+            pos_hint: {"top": 1}              
+            title_center: True
+            #right_action_items: [["robot-happy"]]
+            left_action_items: [["arrow-left-bold", lambda x : app.back_with_animation('config_screen')]]
+            size_hint_y: .10
+        ScrollView:
+            MDBoxLayout:
+                id: image_list
+                orientation: "vertical"
+                size_hint_y: None
+                padding: dp(10)
+                spacing: dp(10)
+                height: self.minimum_height
+        

@@ -1,0 +1,48 @@
+      
+<LoginScreen>:
+    name: "login_screen"
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "10dp"  # Espaciado entre los widgets
+        MDLabel:
+        MDTextField:
+            id: username_field
+            hint_text: "Username"
+            mode: "round"
+            color_active: 1, 1, 1, 1  # Color del texto activo (blanco)
+            color_normal: 1, 1, 1, 1  # Color del texto normal (blanco)
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5, "y": 0.1}
+
+        MDTextField:
+            id: password_field
+            hint_text: "Password"
+            mode: "round"
+            password: True
+            color_active: 1, 1, 1, 1  # Color del texto activo (blanco)
+            color_normal: 1, 1, 1, 1  # Color del texto normal (blanco)
+            size_hint_y: None
+            height: "36dp"
+            pos_hint: {"center_x": 0.5, "y": 0.2}
+
+        MDRectangleFlatButton:
+            text: "Login"
+            size_hint: .2, .1
+            pos_hint: {"center_x": 0.5, "y": 0.3}
+            on_press: root.login()  # Llamar al método login cuando se presione el botón
+            size_hint_y: None  # Hacer que el botón tenga un tamaño fijo
+            height: "48dp"  # Altura fija del botón
+            pos_hint: {"center_x": 0.5}  # Centrar el botón horizontalmente
+        MDLabel:
+            
+        MDRectangleFlatButton:
+            text: "Register"
+            size_hint: .2, .1
+            pos_hint: {"center_x": 0.5, "y": 0.3}
+            on_press: root.register()  # Llamar al método login cuando se presione el botón
+            size_hint_y: None  # Hacer que el botón tenga un tamaño fijo
+            height: "48dp"  # Altura fija del botón
+            pos_hint: {"center_x": 0.5}  # Centrar el botón horizontalmente
+    
