@@ -1,0 +1,71 @@
+<ListScreen>:
+    id: list_screen
+    name: "list_screen"
+
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        pos_hint: {"center_x":.5,"center_y":.4}
+        height: Window.height - dp(120)  # Ajustar dinámicamente según el tamaño de la ventana
+        padding: [dp(10), "56dp", dp(10), dp(10)]  # Espaciado en todos los lados
+        
+        MDBoxLayout:
+            id: students_list
+            orientation: "vertical"
+            size_hint_y: None
+            padding: dp(10)
+            spacing: dp(15)
+            halign: 'center_x'
+            height: self.minimum_height
+            radius: (15,)  # Bordes redondeados
+            elevation: 2  # Sombra
+            width: Window.width - dp(20)  # Ajuste para que haya espacio a ambos lados
+            size_hint_x: None
+
+
+    MDTopAppBar:
+        id: topbar
+        title: "Curso"
+        pos_hint: {"top": 1}
+        size_hint_y: .1            
+        title_center: True
+        right_action_items: [["robot-happy"]]
+        left_action_items: [["arrow-left-bold", lambda x : app.back_with_animation('main_screen')]]
+        
+    MDBottomNavigation:
+        id: bot_nav
+        size_hint_y: .1
+        pos_hint: {"bottom": 1}
+        text_color_active: app.theme_cls.disabled_hint_text_color
+
+        MDBottomNavigationItem:
+            id: main_screen
+            text: 'News'
+            icon: 'newspaper'
+            on_tab_release:
+                app.back_with_animation('main_screen')
+                #bot_nav.set_item(None)  # Accede directamente al MDBottomNavigation usando su id
+
+        MDBottomNavigationItem:
+            id: user_screen
+            text: 'User'
+            icon: 'account'
+            on_tab_release:
+                app.set_screen('user_screen')
+                #bot_nav.set_item(None)  # Accede directamente al MDBottomNavigation usando su id
+
+        MDBottomNavigationItem:
+            id: game_screen
+            text: 'Games'
+            icon: 'gamepad'
+            on_tab_release:
+                app.set_screen('game_screen')
+                #bot_nav.set_item(None)  # Accede directamente al MDBottomNavigation usando su id
+
+        MDBottomNavigationItem:
+            id: config_screen
+            text: 'Settings'
+            icon: 'cog'
+            on_tab_release:
+                app.set_screen('config_screen')
+                #bot_nav.set_item(None)  # Accede directamente al MDBottomNavigation usando su id

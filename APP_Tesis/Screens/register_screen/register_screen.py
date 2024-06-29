@@ -19,6 +19,7 @@ from kivy.clock import Clock
 import re
 import mysql.connector
 import configparser
+from datetime import datetime
 
 # Define la cadena KV con las pantallas de inicio de sesión y la pantalla principal
 # GLOBAL##########################################
@@ -58,7 +59,7 @@ class RegisterScreen(Screen):
         email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
         if not (
-            8 <= len(username) <= 12
+            8 <= len(username) <= 20
             and 8 <= len(password) <= 12
             and any(c.isdigit() for c in password)
             and any(not c.isalnum() for c in password)
@@ -71,14 +72,23 @@ class RegisterScreen(Screen):
             self.show_invalid_criteria_modal()
             return
 
-        # Leer configuración desde config.ini
         config = configparser.ConfigParser()
         config.read("config.ini")
+        if "mysql" not in config:
+            toast("Configuración MySQL no encontrada")
+            return
+        if not all(
+            key in config["mysql"] for key in ["host", "user", "password", "db"]
+        ):
+            toast("Configuración MySQL incompleta")
+            return
+
         host = config["mysql"]["host"]
         db_user = config["mysql"]["user"]
         db_password = config["mysql"]["password"]
         dbname = config["mysql"]["db"]
         try:
+
             db = mysql.connector.connect(
                 host=host, user=db_user, password=db_password, database=dbname
             )
@@ -103,12 +113,10 @@ class RegisterScreen(Screen):
                 toast("Nombre de usuario ya registrado")
                 db.close()
                 return
-
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             # Insertar nuevo usuario
-            sql_command = (
-                "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
-            )
-            values = (username, password, usermail)
+            sql_command = "INSERT INTO users (username, password, email, profile_picture_path, institution, max_score, growth_rate, max_streak, last_login) VALUES (%s, %s, %s, 'assets/images/1.png', 'Universidad del Biobio',0,0,0,%s)"
+            values = (username, password, usermail, now)
             cursor.execute(sql_command, values)
             db.commit()
             db.close()
@@ -120,9 +128,10 @@ class RegisterScreen(Screen):
             user = username
             pw = password
             email = usermail
+        except mysql.connector.Error as db_error:
+            toast(f"Error de conexión a la base de datos: {db_error}")
         except Exception as e:
-            toast(f"Revisa tu conexion {e}")
-        return
+            toast(f"Error: {e}")
 
     def show_invalid_criteria_modal(self):
         modal = MDDialog(

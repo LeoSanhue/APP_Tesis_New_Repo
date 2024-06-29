@@ -21,6 +21,7 @@ from Screens.user_profile_screen.user_profile_screen import UserProfileScreen
 from Screens.login_screen.login_screen import *  # Importa la clase LoginScreen
 from Screens.config_screen.config_screen import *  # Importa la clase ConfigScreen
 from Screens.game_screen.game_screen import *  # Importa la clase GameScreen
+from Screens.game_screen.list_screen import *  # Importa la clase GameScreen
 from Screens.register_screen.register_screen import *  # Importa la clase RegisterScreen
 from Screens.config_screen.image_viewer import *
 from Screens.config_screen.background_viewer import *
@@ -112,6 +113,7 @@ class TestApp(MDApp):
         self.screen_manager.add_widget(main_screen.MainScreen(name="main_screen"))
         self.screen_manager.add_widget(ScoreScreen(name="score_screen"))
         self.screen_manager.add_widget(ConfigScreen(name="config_screen"))
+        self.screen_manager.add_widget(ListScreen(name="list_screen"))
         self.screen_manager.add_widget(RegisterScreen(name="register_screen"))
         self.screen_manager.add_widget(ImageViewerScreen(name="image_viewer_screen"))
         self.screen_manager.add_widget(
@@ -171,14 +173,45 @@ class TestApp(MDApp):
 
     def set_screen(self, screen_name):
         self.root.transition = MDSlideTransition(direction="left")
+        if screen_name == "game_screen" and self.load_user_role():
+            screen_name = "list_screen"
         self.root.current = screen_name
 
     def back_with_animation(self, screen_name):
         self.root.transition = MDSlideTransition(direction="right")
         self.root.current = screen_name
 
-    def get_icon(self, name):
-        return icon(name)
+    def load_user_role(self):
+        login_screen = LoginScreen()
+        email = login_screen.return_userlog()
+        print(email, " prof")
+
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+        host = config["mysql"]["host"]
+        user = config["mysql"]["user"]
+        password = config["mysql"]["password"]
+        dbname = config["mysql"]["db"]
+        try:
+            db = mysql.connector.connect(
+                host=host, user=user, password=password, database=dbname
+            )
+            cursor = db.cursor(dictionary=True)
+            email = login_screen.return_userlog()
+            query = "SELECT role FROM users WHERE email = %s"
+            cursor.execute(query, (email,))
+            result = cursor.fetchone()
+            if result["role"] == "profesor":
+                cursor.close()
+                db.close()
+                return True
+            else:
+                cursor.close()
+                db.close()
+                return False
+        except Exception as e:
+            toast(f"Revisa tu conexion {e}")
+            return False
 
     def submit(self):
         ###### MYSQL #################

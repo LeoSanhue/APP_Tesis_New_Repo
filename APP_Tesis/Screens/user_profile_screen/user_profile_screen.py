@@ -87,7 +87,7 @@ class UserProfileScreen(Screen):
 
     def save_profile_picture(self, image_path):
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read("APP_Tesis/config.ini")
         host = config["mysql"]["host"]
         user = config["mysql"]["user"]
         password = config["mysql"]["password"]

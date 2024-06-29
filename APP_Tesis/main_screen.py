@@ -110,6 +110,8 @@ class MainScreen(Screen):
 
     def on_enter(self):
         self.ids.news_container.clear_widgets()  # Limpiar los widgets existentes
+        app = MDApp.get_running_app()
+        print("prof:", app.load_user_role())
         news_data = [
             {
                 "id": 1,

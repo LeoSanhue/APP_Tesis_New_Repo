@@ -3,6 +3,7 @@
 #: include Screens\user_profile_screen\user_profile_screen.kv
 #: include Screens\register_screen\register_screen.kv
 #: include Screens\game_screen\game_screen.kv
+#: include Screens\game_screen\list_screen.kv
 #: import Animation kivy.animation.Animation
 #: include Screens\config_screen\config_screen.kv
 #: include Screens\config_screen\image_viewer.kv
@@ -27,6 +28,8 @@ MDScreenManager:
     ImageViewerScreen:
 
     BackgroundViewerScreen:
+        
+    ListScreen:
 
 <DrawerClickableItem@MDNavigationDrawerItem>
     focus_color: "#e7e4c0"
