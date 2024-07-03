@@ -31,6 +31,21 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Ellipse, StencilPush, StencilUse, StencilUnUse, StencilPop
 from kivy.uix.image import Image
 from kivy.properties import StringProperty
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Image
+from io import BytesIO
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+from reportlab.lib.utils import ImageReader
+import matplotlib.pyplot as plt
+from io import BytesIO
+import tempfile
+import os
 
 
 class UserProfileScreen(Screen):
@@ -81,32 +96,6 @@ class UserProfileScreen(Screen):
             toast(f"Revisa tu conexion {e}")
         return
 
-    def update_user_data(self, user_data):
-        # Implementar lógica para actualizar datos del usuario en la base de datos
-        pass
-
-    def save_profile_picture(self, image_path):
-        config = configparser.ConfigParser()
-        config.read("APP_Tesis/config.ini")
-        host = config["mysql"]["host"]
-        user = config["mysql"]["user"]
-        password = config["mysql"]["password"]
-        dbname = config["mysql"]["db"]
-        try:
-            db = mysql.connector.connect(
-                host=host, user=user, password=password, database=dbname
-            )
-            cursor = db.cursor()
-            query = "UPDATE users SET profile_picture_path=%s WHERE username=%s"
-            cursor.execute(query, (image_path, user))
-            db.commit()
-
-            cursor.close()
-            db.close()
-        except Exception as e:
-            toast(f"Revisa tu conexion {e}")
-        return
-
     def prompIA(self):
 
         # Conexión a la base de datos MySQL
@@ -120,12 +109,83 @@ class UserProfileScreen(Screen):
             host=host, user=user, password=password, database=dbname
         )
 
+        def obtener_id_usuario_por_email(email):
+            # Leer la configuración de la base de datos desde el archivo config.ini
+            config = configparser.ConfigParser()
+            config.read("config.ini")
+            host = config["mysql"]["host"]
+            user = config["mysql"]["user"]
+            password = config["mysql"]["password"]
+            dbname = config["mysql"]["db"]
+
+            try:
+                # Conectar a la base de datos
+                db = mysql.connector.connect(
+                    host=host, user=user, password=password, database=dbname
+                )
+                cursor = db.cursor(dictionary=True)
+
+                # Consulta para obtener el ID del usuario por email
+                query = "SELECT id FROM users WHERE email = %s"
+                cursor.execute(query, (email,))
+                result = cursor.fetchone()
+
+                cursor.close()
+                db.close()
+
+                # Devolver el ID del usuario si se encuentra
+                if result:
+                    return result["id"]
+                else:
+                    return None
+
+            except mysql.connector.Error as err:
+                print(f"Error: {err}")
+                return None
+
+        def obtener_puntajes_usuario(user_id):
+            login_screen = LoginScreen()
+            email = login_screen.return_userlog()
+            print(email, " user")
+
+            config = configparser.ConfigParser()
+            config.read("config.ini")
+            host = config["mysql"]["host"]
+            user = config["mysql"]["user"]
+            password = config["mysql"]["password"]
+            dbname = config["mysql"]["db"]
+            try:
+                db = mysql.connector.connect(
+                    host=host, user=user, password=password, database=dbname
+                )
+                cursor = db.cursor(dictionary=True)
+                email = login_screen.return_userlog()
+            except:
+                print("error")
+            cursor = db.cursor(dictionary=True)
+            # Obtener los puntajes del último mes para el usuario
+            query = """
+            SELECT date, score 
+            FROM scores 
+            WHERE user_id = %s AND date >= %s
+            ORDER BY date
+            """
+            hace_un_mes = datetime.now() - timedelta(days=30)
+            cursor.execute(query, (user_id, hace_un_mes))
+            puntajes = cursor.fetchall()
+            cursor.close()
+            return puntajes
+
         def obtener_mensajes_usuario(user_id):
             cursor = db.cursor(dictionary=True)
             # Obtener la fecha de hace un mes
             hace_un_mes = datetime.now() - timedelta(days=30)
-
+            login_screen = LoginScreen()
+            email = login_screen.return_userlog()
             # Consultar los mensajes del último mes para el usuario con su frecuencia
+            # query = "SELECT id FROM users WHERE email = %s"
+            # cursor.execute(query, (email,))
+            # user_id = cursor.fetchall()
             query = """
             SELECT message, COUNT(message) as count 
             FROM scores 
@@ -165,11 +225,13 @@ class UserProfileScreen(Screen):
                 return "\n".join(lines[1:]).strip()
             return text.strip()
 
-        def truncate_at_first_punctuation(text):
-            """Truncates the text at the first punctuation mark (.¡?)."""
-            match = re.search(r"[.!?]", text)
+        def truncate_at_last_punctuation(text):
+            """Truncates the text at the last punctuation mark (.¡?)."""
+            match = re.search(
+                r"[.!?][^.!?]*$", text[::-1]
+            )  # Search from the end of the text
             if match:
-                return text[: match.end()]
+                return text[: -match.start()]  # Truncate at the start of the match
             return text
 
         def remove_last_line(text):
@@ -179,12 +241,102 @@ class UserProfileScreen(Screen):
                 return "\n".join(lines[:-1]).strip()
             return text.strip()
 
+        def save_pdf(report_text, puntajes):
+            file_path = "report.pdf"
+
+            # Create a buffer to collect PDF elements
+            buffer = BytesIO()
+
+            # Create a PDF document object using SimpleDocTemplate
+            doc = SimpleDocTemplate(buffer, pagesize=letter)
+            styles = getSampleStyleSheet()
+
+            # Add a title to the document
+            title = Paragraph("Informe de Rendimiento", styles["Title"])
+            elements = [title]
+
+            # Add the report text
+            report_paragraphs = [
+                Paragraph(line, styles["Normal"]) for line in report_text.split("\n")
+            ]
+            elements.extend(report_paragraphs)
+
+            # Generate the plot
+            dates = [p["date"].strftime("%Y-%m-%d") for p in puntajes]
+            scores = [p["score"] for p in puntajes]
+
+            plt.figure(figsize=(6, 4))
+            plt.plot(dates, scores, marker="o", linestyle="-", color="b")
+            plt.title("Puntajes de los últimos 30 días")
+            plt.xlabel("Fecha")
+            plt.ylabel("Puntaje")
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+
+            # Save plot to a temporary file
+            with tempfile.NamedTemporaryFile(
+                suffix=".png", delete=False
+            ) as temp_plot_file:
+                plt.savefig(temp_plot_file.name, format="png")
+                temp_plot_file.close()
+
+                # Add the plot to the PDF document
+                plot_image = Image(temp_plot_file.name, width=400, height=200)
+                elements.append(plot_image)
+
+            # Build the PDF document
+            doc.build(elements)
+
+            # Save the buffer to a file
+            with open(file_path, "wb") as f:
+                f.write(buffer.getvalue())
+
+            # Delete the temporary plot file after using it
+            if temp_plot_file.name:
+                os.remove(temp_plot_file.name)
+
+            toast(f"Informe guardado en {file_path}")
+            return file_path
+
+        def send_email(email_address, file_path):
+            ######## MODIFICAR AL IMPLEMENTAR ESTO SOLO MANDA A MI CORREO DE PRUEBAS #######################
+            sender_email = ""
+            thingy = "ajol gypf ryut uedv"
+            subject = "Informe de Rendimiento"
+            body = "Adjunto encontrarás tu informe de rendimiento."
+            email_address = ""
+            ##################################################S
+            msg = MIMEMultipart()
+            msg["From"] = sender_email
+            msg["To"] = email_address
+            msg["Subject"] = subject
+
+            msg.attach(MIMEText(body, "plain"))
+
+            attachment = open(file_path, "rb")
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(attachment.read())
+            encoders.encode_base64(part)
+            part.add_header("Content-Disposition", f"attachment; filename= {file_path}")
+
+            msg.attach(part)
+
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(sender_email, thingy)
+            text = msg.as_string()
+            server.sendmail(sender_email, email_address, text)
+            server.quit()
+            toast("Correo enviado exitosamente")
+
         # Your Hugging Face API key
         api_key = "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"
 
-        # Ejemplo de uso
-        user_id = 1  # ID del usuario para el que quieres generar el mensaje
+        login_screen = LoginScreen()
+        email = login_screen.return_userlog()  # Utiliza un correo válido para pruebas
+        user_id = obtener_id_usuario_por_email(email)
         mensajes_usuario = obtener_mensajes_usuario(user_id)
+        puntajes_usuario = obtener_puntajes_usuario(user_id)
 
         if mensajes_usuario:
             mensaje_mas_frecuente = max(mensajes_usuario, key=lambda x: x["count"])
@@ -206,8 +358,11 @@ class UserProfileScreen(Screen):
             if mensaje_personalizado:
                 mensaje_limpio = remove_first_line(mensaje_personalizado)
                 mensaje_limpio = remove_last_line(mensaje_limpio)
-                mensaje_truncado = truncate_at_first_punctuation(mensaje_limpio)
-
+                # mensaje_limpio = truncate_at_last_punctuation(mensaje_limpio)
+                # Guardar el PDF
+                # Enviar el PDF por correo electrónico
+                file_path = save_pdf(mensaje_limpio, puntajes_usuario)
+                send_email(email, file_path)
                 return mensaje_limpio
             else:
                 print("No se pudo generar el mensaje personalizado.")

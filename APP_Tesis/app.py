@@ -45,6 +45,16 @@ from kivy.metrics import dp
 from kivy.properties import StringProperty
 from kivy.core.window import Window
 import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+import matplotlib.pyplot as plt
+from io import BytesIO
 
 Window.size = (350, 600)
 
